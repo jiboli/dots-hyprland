@@ -63,6 +63,7 @@ Scope {
                     right: true
                 }
 
+                BarContent {
                     id: barContent
                     anchors {
                         right: parent.right
