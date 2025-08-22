@@ -10,10 +10,11 @@ import Qt5Compat.GraphicalEffects
  */
 ProgressBar {
     id: root
+    property bool vertical: false
     property real valueBarWidth: 30
     property real valueBarHeight: 18
-    property color highlightColor: Appearance?.colors.colPrimary ?? "#685496"
-    property color trackColor: ColorUtils.transparentize(highlightColor, 0.3) ?? "#F1D3F9"
+    property color highlightColor: Appearance?.colors.colOnSecondaryContainer ?? "#685496"
+    property color trackColor: ColorUtils.transparentize(highlightColor, 0.5) ?? "#F1D3F9"
     property alias radius: contentItem.radius
     property string text
     default property Item textMask: Item {
@@ -45,12 +46,36 @@ ProgressBar {
         visible: false
 
         Rectangle {
+            id: progressFill
             anchors {
-                left: parent.left
                 top: parent.top
                 bottom: parent.bottom
+                left: parent.left
+                right: undefined
             }
             width: parent.width * root.visualPosition
+            height: parent.height
+
+            states: State {
+                name: "vertical"
+                when: root.vertical
+                AnchorChanges {
+                    target: progressFill
+                    anchors {
+                        top: undefined
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.right
+                    }
+                }
+                PropertyChanges {
+                    target: progressFill
+                    width: parent.width
+                    height: parent.height * root.visualPosition
+                }
+            }
+
+            radius: Appearance.rounding.unsharpen
             color: root.highlightColor
         }
     }
